@@ -1,0 +1,22 @@
+import ReactPaginate from 'react-paginate'
+import styles from './Pagination.module.scss'
+import { useEffect, useState } from 'react'
+
+const Pagination = ({ currentPage, onChangePage }) => {
+  return (
+    <>
+      <ReactPaginate
+        className={styles.root}
+        breakLabel="..."
+        nextLabel=">"
+        previousLabel="<"
+        onPageChange={(e) => onChangePage(e.selected + 1)}
+        pageRangeDisplayed={3}
+        pageCount={3}
+        forcePage={currentPage - 1}
+      />
+    </>
+  )
+}
+
+export default Pagination

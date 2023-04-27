@@ -1,23 +1,29 @@
 import React, { useState } from 'react'
 
-const Sort = () => {
+const Sort = ({ sortType, setSortType, setSortingOrder, sortingOrder }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [activeList, setActiveList] = useState(0)
 
-  const list = ['популярности', 'цене', 'алфавиту']
-  const sortName = list[activeList]
+  const list = [
+    { name: 'популярности', sort: 'rating' },
+    { name: 'цене', sort: 'price' },
+    { name: 'алфавиту', sort: 'title' },
+  ]
 
-  const changeSelectedList = (i) => {
-    setActiveList(i)
+  const onChangeSelectedList = (obj) => {
+    setSortType(obj)
     setIsOpen(false)
   }
   return (
     <div className="sort">
       <div className="sort__label">
         <svg
-          transform={isOpen ? 'rotate(180)' : ''}
-          width="10"
-          height="6"
+          onClick={() => {
+            setSortingOrder(!sortingOrder)
+          }}
+          transform={!sortingOrder ? 'rotate(-180 0 0)' : ''}
+          width="15"
+          cursor="pointer"
+          height="16"
           viewBox="0 0 10 6"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -28,19 +34,19 @@ const Sort = () => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={() => setIsOpen(!isOpen)}>{sortName}</span>
+        <span onClick={() => setIsOpen(!isOpen)}>{sortType.name}</span>
       </div>
       {isOpen && (
         <div className="sort__popup">
           <ul>
-            {list.map((list, i) => {
+            {list.map((obj, i) => {
               return (
                 <li
                   key={i}
-                  onClick={() => changeSelectedList(i)}
-                  className={activeList === i ? 'active' : ''}
+                  onClick={() => onChangeSelectedList(obj)}
+                  className={sortType.name === obj.name ? 'active' : ''}
                 >
-                  {list}
+                  {obj.name}
                 </li>
               )
             })}
