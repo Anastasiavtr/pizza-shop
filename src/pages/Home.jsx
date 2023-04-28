@@ -9,53 +9,69 @@ import Sort from '../components/Sort'
 import { useEffect, useState } from 'react'
 import { UserContext } from '../App'
 import Pagination from '../components/Pagination/Pagination'
+import { useDispatch, useSelector } from 'react-redux'
+import { setCurrentPage, setIsLoading } from '../Redux/Slices/filterSlice'
+import { setItems } from '../Redux/Slices/pizzaSlice'
+import axios from 'axios'
 
 const Home = () => {
-  const [items, setItems] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [activeCategory, setActiveCategory] = useState(0)
-  const [currentPage, setCurrentPage] = useState(1)
-  const [sortType, setSortType] = useState({
-    name: 'популярности',
-    sort: 'rating',
-  })
-  const [sortingOrder, setSortingOrder] = useState(false)
+  const items = useSelector((state) => state.pizza.items)
 
-  const { searchValue } = useContext(UserContext)
+  const activeCategory = useSelector((state) => state.filter.category)
+  const currentPage = useSelector((state) => state.filter.currentPage)
+  const searchValue = useSelector((state) => state.filter.searchValue)
+  const sortingOrder = useSelector((state) => state.filter.sortingOrder)
+  const isLoading = useSelector((state) => state.filter.isLoading)
+  const sort = useSelector((state) => state.filter.sort)
+
+  const dispatch = useDispatch()
+
+  // const [items, setItems] = useState([])
+  // const [isLoading, setIsLoading] = useState(true)
+
+  // const [activeCategory, setActiveCategory] = useState(0)
+  // const [currentPage, setCurrentPage] = useState(1)
+
+  // const [sort, setSort] = useState({
+  //   name: 'популярности',
+  //   sort: 'rating',
+  // })
+  // const [sortingOrder, setSortingOrder] = useState(false)
+
+  // const { searchValue } = useContext(UserContext)
 
   const onChangePage = (number) => {
-    setCurrentPage(number)
+    dispatch(setCurrentPage(number))
   }
 
   useEffect(() => {
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
     const category = activeCategory > 0 ? `&category=${activeCategory}` : ''
     const search = searchValue ? `&search=${searchValue}` : ''
 
-    fetch(
-      `https://644683240431e885f0143b60.mockapi.io/items?page=${currentPage}${category}&limit=3&sortBy=${
-        sortType.sort
-      }&order=${sortingOrder ? 'asc' : 'desc'}${search}`
-    ).then((res) =>
-      res.json().then((data) => {
-        setItems(data)
-        setIsLoading(false)
+    axios
+      .get(
+        `https://644683240431e885f0143b60.mockapi.io/items?page=${currentPage}${category}&limit=3&sortBy=${
+          sort.type
+        }&order=${sortingOrder ? 'asc' : 'desc'}${search}`
+      )
+      .then((res) => {
+        dispatch(setItems(res.data))
+        dispatch(setIsLoading(false))
       })
-    )
-  }, [activeCategory, sortType, sortingOrder, searchValue, currentPage])
+  }, [activeCategory, sort, sortingOrder, searchValue, currentPage])
 
   return (
     <div className="container">
       <div className="content__top">
         <Categories
-          setActiveCategory={setActiveCategory}
+          // setActiveCategory={() => dispatch(setActiveCategory)}
           activeCategory={activeCategory}
         />
         <Sort
-          sortType={sortType}
-          setSortType={setSortType}
+          sort={sort}
           sortingOrder={sortingOrder}
-          setSortingOrder={setSortingOrder}
+          // setSortingOrder={setSortingOrder}
         />
       </div>
       <h2 className="content__title">Все пиццы</h2>
