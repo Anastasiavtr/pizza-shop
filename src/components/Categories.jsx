@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { setActiveCategory } from '../Redux/Slices/filterSlice'
+import { setActiveCategory, setCurrentPage } from '../Redux/Slices/filterSlice'
 
 const Categories = ({ activeCategory }) => {
   const dispatch = useDispatch()
 
   const onChangeCategory = (i) => {
     dispatch(setActiveCategory(i))
+    dispatch(setCurrentPage(1))
   }
   const categories = [
     'Все',

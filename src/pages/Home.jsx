@@ -1,18 +1,23 @@
-import React, { useContext } from 'react'
+import React, { useContext, useRef } from 'react'
 import Categories from '../components/Categories'
 import '../scss/app.scss'
 import PizzaBlock from '../components/PizzaBlock'
 import Skeleton from '../components/PizzaBlock/Skeleton'
-
-import Sort from '../components/Sort'
+import qs from 'qs'
+import Sort, { list } from '../components/Sort'
 
 import { useEffect, useState } from 'react'
 import { UserContext } from '../App'
 import Pagination from '../components/Pagination/Pagination'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCurrentPage, setIsLoading } from '../Redux/Slices/filterSlice'
+import {
+  setCurrentPage,
+  setFilter,
+  setIsLoading,
+} from '../Redux/Slices/filterSlice'
 import { setItems } from '../Redux/Slices/pizzaSlice'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
   const items = useSelector((state) => state.pizza.items)
@@ -25,7 +30,9 @@ const Home = () => {
   const sort = useSelector((state) => state.filter.sort)
 
   const dispatch = useDispatch()
-
+  const navigate = useNavigate()
+  const isSearch = useRef(false)
+  const isMounted = useRef(false)
   // const [items, setItems] = useState([])
   // const [isLoading, setIsLoading] = useState(true)
 
@@ -42,9 +49,10 @@ const Home = () => {
 
   const onChangePage = (number) => {
     dispatch(setCurrentPage(number))
+    console.log(number)
   }
 
-  useEffect(() => {
+  const fetchPizzas = () => {
     dispatch(setIsLoading(true))
     const category = activeCategory > 0 ? `&category=${activeCategory}` : ''
     const search = searchValue ? `&search=${searchValue}` : ''
@@ -59,6 +67,39 @@ const Home = () => {
         dispatch(setItems(res.data))
         dispatch(setIsLoading(false))
       })
+  }
+
+  useEffect(() => {
+    if (isMounted.current) {
+      const queryString = qs.stringify(
+        {
+          type: sort.type,
+          activeCategory,
+          currentPage,
+          sortingOrder,
+        },
+        { addQueryPrefix: true }
+      )
+      navigate(queryString)
+    }
+    isMounted.current = true
+  }, [activeCategory, sort, sortingOrder, currentPage])
+
+  useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1))
+      const sort = list.find((obj) => obj.type === params.type)
+      dispatch(setFilter({ ...params, sort }))
+    }
+    isSearch.current = true
+  }, [])
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    if (!isSearch.current) {
+      fetchPizzas()
+    }
+    isSearch.current = false
   }, [activeCategory, sort, sortingOrder, searchValue, currentPage])
 
   return (

@@ -37,10 +37,11 @@ const Search = () => {
         className={styles.input}
         placeholder="Поиск пиццы..."
       />
-      <span onClick={onClickClear} className={styles.clearIcon}>
-        {' '}
-        ✖{' '}
-      </span>
+      {value && (
+        <span onClick={onClickClear} className={styles.clearIcon}>
+          ✖
+        </span>
+      )}
     </div>
   )
 }

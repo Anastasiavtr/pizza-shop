@@ -163,7 +163,7 @@ body {
       display: flex;
       align-items: center;
       margin-right: 15px;
-
+      width: 10%;
       img {
         width: 80px;
         height: 80px;
@@ -174,7 +174,7 @@ body {
       display: flex;
       flex-direction: column;
       justify-content: center;
-
+      width: 30%;
       h3 {
         font-weight: bold;
         font-size: 22px;
@@ -193,7 +193,7 @@ body {
       align-items: center;
       justify-content: space-between;
       gap: 5px;
-
+      width: 10%;
       &-minus {
         svg {
           path:first-of-type {
@@ -211,7 +211,7 @@ body {
       display: flex;
       align-items: center;
       justify-content: center;
-
+      width: 26%;
       b {
         font-weight: bold;
         font-size: 22px;
@@ -223,7 +223,7 @@ body {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-
+      width: 4%;
       .button {
         border-color: darken($color: $gray-line, $amount: 10);
       }
