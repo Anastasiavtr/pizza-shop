@@ -24,6 +24,16 @@ body {
 .content {
   padding: 40px 0;
 
+  &__error-info {
+    margin: 60px auto;
+    width: 580px;
+
+    h2 {
+      font-size: 28px;
+      font-weight: 700;
+      text-align: center;
+    }
+  }
   &__title {
     margin: 70px 0 30px 0;
     font-weight: bold;
@@ -129,6 +139,7 @@ body {
     svg,
     path {
       transition: all $duration ease-in-out;
+      color: #b6b6b6;
     }
 
     &:hover {
@@ -194,13 +205,6 @@ body {
       justify-content: space-between;
       gap: 5px;
       width: 10%;
-      &-minus {
-        svg {
-          path:first-of-type {
-            display: none;
-          }
-        }
-      }
 
       b {
         font-size: 22px;
@@ -224,13 +228,14 @@ body {
       align-items: center;
       justify-content: flex-end;
       width: 4%;
+      border: none;
+      background-color: inherit;
+
       .button {
         border-color: darken($color: $gray-line, $amount: 10);
       }
 
       svg {
-        transform: rotate(45deg);
-
         path {
           fill: darken($color: $gray-line, $amount: 15);
         }
@@ -318,20 +323,28 @@ body {
   }
 
   &--empty {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
     margin: 0 auto;
-    width: 560px;
+
     text-align: center;
 
     h2 {
       font-size: 32px;
       margin-bottom: 10px;
     }
-
+    @media (max-width: 800px) {
+      h2 {
+        font-size: 26px;
+      }
+    }
     p {
       font-size: 18px;
       line-height: 145.4%;
       letter-spacing: 0.01em;
       color: #777777;
+      padding: 0 10px;
     }
 
     icon {
@@ -341,7 +354,9 @@ body {
 
     img {
       display: block;
-      width: 300px;
+      max-width: 300px;
+      width: 100%;
+      padding: 0 10px;
       margin: 45px auto 60px;
     }
 

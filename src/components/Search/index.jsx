@@ -4,6 +4,7 @@ import styles from './Search.module.scss'
 import { useDispatch } from 'react-redux'
 import { setSearchValue } from '../../Redux/Slices/filterSlice'
 import debounce from 'lodash.debounce'
+import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai'
 
 const Search = () => {
   const dispatch = useDispatch()
@@ -37,9 +38,10 @@ const Search = () => {
         className={styles.input}
         placeholder="Поиск пиццы..."
       />
+      <AiOutlineSearch />
       {value && (
         <span onClick={onClickClear} className={styles.clearIcon}>
-          ✖
+          <AiOutlineClose />
         </span>
       )}
     </div>

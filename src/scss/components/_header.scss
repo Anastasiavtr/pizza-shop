@@ -9,7 +9,12 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-between;
+
     gap: 30px;
+
+    @media (max-width: 1200px) {
+      justify-content: space-evenly;
+    }
 
     @media (max-width: 670px) {
       flex-direction: column;
