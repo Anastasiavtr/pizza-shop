@@ -4,32 +4,20 @@ import Home from './pages/Home'
 import NotFound from './pages/NotFound'
 import './scss/app.scss'
 import Cart from './pages/Cart'
-import { useState } from 'react'
-import { createContext } from 'react'
-
-// export const UserContext = createContext({
-//   searchValue: '',
-//   setSearchValue: () => {},
-// })
+import FullPizza from './pages/FullPizza'
+import MainLayout from './layouts/MainLayout'
 
 function App() {
-  // const [searchValue, setSearchValue] = useState('')
-
   return (
     <div className="App">
-      <div className="wrapper">
-        {/* <UserContext.Provider value={{ searchValue, setSearchValue }}> */}
-        <Header />
-
-        <div className="content">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
-        {/* </UserContext.Provider> */}
-      </div>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route path="" element={<Home />} />
+          <Route path="cart" element={<Cart />} />
+          <Route path="pizza/:id" element={<FullPizza />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
     </div>
   )
 }
