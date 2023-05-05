@@ -1,22 +1,46 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { addItem, minusItem, removeItem } from '../Redux/Slices/cartSlice'
+import {
+  CartItemType,
+  addItem,
+  minusItem,
+  removeItem,
+} from '../Redux/Slices/cartSlice'
 import { AiOutlineClose, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
+import { useAppDispatch } from '../AppHooks'
 
-const CartItem = ({ id, title, price, imageUrl, size, type, count }) => {
-  const dispatch = useDispatch()
+type CartItemProps = {
+  id: string
+  title: string
+  price: number
+  imageUrl: string
+  size: number
+  type: string
+  count: number
+}
+
+const CartItem: React.FC<CartItemProps> = ({
+  id,
+  title,
+  price,
+  imageUrl,
+  size,
+  type,
+  count,
+}) => {
+  const dispatch = useAppDispatch()
 
   const onClickPlus = () => {
-    dispatch(addItem({ id, type, size }))
+    dispatch(addItem({ id, type, size } as CartItemType))
   }
-  const onClickRemove = () => {
-    dispatch(removeItem({ id, type, size }))
+  const onClickRemove = ({}) => {
+    dispatch(removeItem({ id, type, size, price } as CartItemType))
   }
   const onClickMinus = () => {
-    if (count > 0) {
-      dispatch(minusItem({ id, price, type, size }))
+    if (count > 1) {
+      dispatch(minusItem({ id, price, type, size } as CartItemType))
     } else {
-      onClickRemove({ id, price, type, size })
+      onClickRemove({ id, price, type, size } as CartItemType)
     }
   }
 

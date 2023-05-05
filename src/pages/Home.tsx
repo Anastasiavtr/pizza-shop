@@ -1,8 +1,13 @@
 import React, { useRef } from 'react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { setCurrentPage, setFilter } from '../Redux/Slices/filterSlice'
+
+import {
+  SortType,
+  setActiveCategory,
+  setCurrentPage,
+  setFilter,
+} from '../Redux/Slices/filterSlice'
 import qs from 'qs'
 import '../scss/app.scss'
 import Categories from '../components/Categories'
@@ -10,37 +15,47 @@ import PizzaBlock from '../components/PizzaBlock'
 import Skeleton from '../components/PizzaBlock/Skeleton'
 import Sort, { list } from '../components/Sort'
 import Pagination from '../components/Pagination/Pagination'
-import { fetchPizza } from '../Redux/Slices/pizzaSlice'
+import {
+  PizzaItemType,
+  SearchPizzaType,
+  fetchPizza,
+} from '../Redux/Slices/pizzaSlice'
+import { useAppDispatch, useAppSelector } from '../AppHooks'
 
-const Home = () => {
-  const { items, status } = useSelector((state) => state.pizza)
-  const activeCategory = useSelector((state) => state.filter.category)
-  const { currentPage, searchValue, sortingOrder, sort } = useSelector(
+const Home: React.FC = () => {
+  const { items, status } = useAppSelector((state) => state.pizza)
+  const { currentPage, searchValue, sortingOrder, sort } = useAppSelector(
     (state) => state.filter
   )
+  const activeCategory = useAppSelector((state) => state.filter.category)
 
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const isSearch = useRef(false)
   const isMounted = useRef(false)
 
-  const onChangePage = (number) => {
-    dispatch(setCurrentPage(number))
+  const onChangePage = (value: number) => {
+    dispatch(setCurrentPage(value))
+  }
+
+  const onChangeCategory = (i: number) => {
+    dispatch(setActiveCategory(i))
   }
 
   const getPizza = async () => {
-    const category = activeCategory > 0 ? `&category=${activeCategory}` : ''
+    const category = activeCategory > 0 ? String(activeCategory) : ''
     const search = searchValue ? `&search=${searchValue}` : ''
     const sorting = sortingOrder ? `&order=asc` : `&order=desc`
+    let sortType = sort.type
 
     dispatch(
       fetchPizza({
         category,
         search,
-        currentPage,
-        sort,
+        currentPage: String(currentPage),
+        sortType,
         sorting,
-      })
+      } as SearchPizzaType)
     )
   }
 
@@ -49,12 +64,13 @@ const Home = () => {
       const queryString = qs.stringify(
         {
           type: sort.type,
-          activeCategory,
+          category: activeCategory,
           currentPage,
           sortingOrder,
         },
         { addQueryPrefix: true }
       )
+
       navigate(queryString)
     }
     isMounted.current = true
@@ -62,11 +78,22 @@ const Home = () => {
 
   useEffect(() => {
     if (window.location.search) {
-      const params = qs.parse(window.location.search.substring(1))
-      const sort = list.find((obj) => obj.type === params.type)
-      dispatch(setFilter({ ...params, sort }))
+      const params = qs.parse(
+        window.location.search.substring(1)
+      ) as unknown as SearchPizzaType
+      let sort = list.find((obj) => obj.type === params.sortType) as SortType
+
+      dispatch(
+        setFilter({
+          category: +params.category,
+          searchValue: params.search || '',
+          currentPage: Number(params.currentPage),
+          sortingOrder: params.sortingOrder,
+          sort: sort || list[0],
+        })
+      )
     }
-    isSearch.current = true
+    // isSearch.current = true
   }, [])
 
   useEffect(() => {
@@ -75,14 +102,17 @@ const Home = () => {
   }, [activeCategory, sort, sortingOrder, searchValue, currentPage])
 
   const skeleton = [...new Array(6)].map((_, i) => <Skeleton key={i} />)
-  const pizzaArray = items.map((pizza) => (
+  const pizzaArray = items.map((pizza: PizzaItemType) => (
     <PizzaBlock {...pizza} key={pizza.id} />
   ))
 
   return (
     <div className="container">
       <div className="content__top">
-        <Categories activeCategory={activeCategory} />
+        <Categories
+          activeCategory={activeCategory}
+          onChangeCategory={onChangeCategory}
+        />
         <Sort sort={sort} sortingOrder={sortingOrder} />
       </div>
       <h2 className="content__title">Все пиццы</h2>

@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { setActiveCategory, setCurrentPage } from '../Redux/Slices/filterSlice'
+import React from 'react'
 
-const Categories = ({ activeCategory }) => {
-  const dispatch = useDispatch()
+type CategoriesProps = {
+  activeCategory: number
+  onChangeCategory: (i: number) => void
+}
 
-  const onChangeCategory = (i) => {
-    dispatch(setActiveCategory(i))
-    dispatch(setCurrentPage(1))
-  }
+const Categories: React.FC<CategoriesProps> = ({
+  activeCategory,
+  onChangeCategory,
+}) => {
   const categories = [
     'Все',
     'Мясные',

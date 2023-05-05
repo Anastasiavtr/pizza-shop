@@ -1,12 +1,17 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import Spinner from '../assets/img/Spinner.svg'
+import Spinner from '../assets/img/spinning-circles.svg'
 
-const FullPizza = () => {
+const FullPizza: React.FC = () => {
   const params = useParams()
-  const [pizza, setPizza] = useState()
+  const [pizza, setPizza] = useState<{
+    imageUrl: string
+    title: string
+    price: string
+  }>()
   const navigate = useNavigate()
+
   useEffect(() => {
     const fetchPizza = async () => {
       try {
@@ -26,6 +31,8 @@ const FullPizza = () => {
     return (
       <div className="content__items">
         <img src={Spinner} alt="Spinner" />
+
+        {/* <Spinner /> */}
       </div>
     )
   }

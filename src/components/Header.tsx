@@ -2,12 +2,12 @@ import React from 'react'
 import logoSvg from '../assets/img/pizza-logo.svg'
 import { Link } from 'react-router-dom'
 import Search from './Search'
-import { useSelector } from 'react-redux'
 import { AiOutlineShoppingCart } from 'react-icons/ai'
+import { useAppSelector } from '../AppHooks'
 
 const Header = () => {
-  const { items, totalPrice } = useSelector((state) => state.cart)
-  const totalCount = items.reduce((sum, item) => {
+  const { items, totalPrice } = useAppSelector((state) => state.cart)
+  const totalCount = items.reduce((sum, item: any) => {
     return sum + item.count
   }, 0)
 

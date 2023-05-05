@@ -1,26 +1,37 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { setSort, setSortingOrder } from '../Redux/Slices/filterSlice'
+import {
+  SortPropertyEnum,
+  SortType,
+  setSort,
+  setSortingOrder,
+} from '../Redux/Slices/filterSlice'
+import { useAppDispatch } from '../AppHooks'
 
-export const list = [
-  { name: 'популярности', type: 'rating' },
-  { name: 'цене', type: 'price' },
-  { name: 'алфавиту', type: 'title' },
+export const list: SortType[] = [
+  { name: 'популярности', type: SortPropertyEnum.RATING },
+  { name: 'цене', type: SortPropertyEnum.PRICE },
+  { name: 'алфавиту', type: SortPropertyEnum.TITLE },
 ]
 
-const Sort = ({ sort, sortingOrder }) => {
-  const dispatch = useDispatch()
+type SortProps = {
+  sort: SortType
+  sortingOrder: boolean
+}
+
+const Sort: React.FC<SortProps> = ({ sort, sortingOrder }) => {
+  const dispatch = useAppDispatch()
 
   const [isOpen, setIsOpen] = useState(false)
-  const sortRef = useRef()
-  const onChangeSelectedList = (obj) => {
+  const sortRef = useRef<HTMLDivElement>(null)
+
+  const onChangeSelectedList = (obj: SortType) => {
     dispatch(setSort(obj))
     setIsOpen(false)
   }
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (!e.composedPath().includes(sortRef.current)) {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (sortRef.current && !e.composedPath().includes(sortRef.current)) {
         setIsOpen(false)
       }
     }

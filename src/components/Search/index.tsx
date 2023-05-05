@@ -6,19 +6,19 @@ import { setSearchValue } from '../../Redux/Slices/filterSlice'
 import debounce from 'lodash.debounce'
 import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai'
 
-const Search = () => {
+const Search: React.FC = () => {
   const dispatch = useDispatch()
 
   const [value, setValue] = useState('')
-  const inputRef = useRef()
+  const inputRef = useRef<HTMLInputElement>(null)
 
-  const onChangeInput = (e) => {
+  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
     updateSearchValue(e.target.value)
   }
 
   const updateSearchValue = useCallback(
-    debounce((value) => {
+    debounce((value: string) => {
       dispatch(setSearchValue(value))
     }, 500),
     []

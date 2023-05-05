@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './NotFound.module.css'
 
-const NotFound = () => {
+const NotFound: React.FC = () => {
   return (
     <div className={styles.wrapper}>
       <span>😞</span>
