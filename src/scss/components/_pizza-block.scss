@@ -7,6 +7,19 @@
 
   &__image {
     width: 260px;
+
+    &--big {
+      animation: myAnim 3s ease 0s infinite normal both;
+      @keyframes myAnim {
+        0% {
+          transform: scale(0.7);
+        }
+
+        100% {
+          transform: scale(1);
+        }
+      }
+    }
   }
 
   &__title {

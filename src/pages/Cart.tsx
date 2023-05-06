@@ -1,7 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import CartItemType from '../components/CartItem'
-import { useDispatch, useSelector } from 'react-redux'
 import { clearItems } from '../Redux/Slices/cartSlice'
 import CartEmpty from '../components/CartEmpty'
 import { AiFillDelete, AiOutlineShoppingCart } from 'react-icons/ai'

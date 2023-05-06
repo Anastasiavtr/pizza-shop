@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import Spinner from '../assets/img/spinning-circles.svg'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import Loading from '../components/Loading'
 
 const FullPizza: React.FC = () => {
   const params = useParams()
@@ -28,20 +28,14 @@ const FullPizza: React.FC = () => {
   }, [])
 
   if (!pizza) {
-    return (
-      <div className="content__items">
-        <img src={Spinner} alt="Spinner" />
-
-        {/* <Spinner /> */}
-      </div>
-    )
+    return <Loading />
   }
   return (
     <div className="container">
-      <div className="content__items">
+      <div className="content__items content__items--pizza">
         <div className="pizza-block">
           <img
-            className="pizza-block__image"
+            className="pizza-block__image pizza-block__image--big"
             src={pizza.imageUrl}
             alt="Pizza"
           />
@@ -49,6 +43,10 @@ const FullPizza: React.FC = () => {
 
           <div className="pizza-block__price">от {pizza.price} ₽</div>
         </div>
+
+        <Link to="/" className="button button--outline  go-back-btn">
+          <span>Вернуться назад</span>
+        </Link>
       </div>
     </div>
   )

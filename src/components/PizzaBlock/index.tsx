@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { CartItemType, addItem } from '../../Redux/Slices/cartSlice'
+import { addItem } from '../../Redux/Slices/cartSlice'
 import { AiOutlinePlus } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
-import { useAppSelector } from '../../AppHooks'
+import { useAppDispatch, useAppSelector } from '../../AppHooks'
+import { CartItemType } from '../../Redux/Slices/types'
 
 export type PizzaBlockProps = {
   id: string
@@ -22,12 +22,12 @@ const PizzaBlock: React.FC<PizzaBlockProps> = ({
   sizes,
   types,
 }) => {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   const cartItem = useAppSelector((state) =>
-    state.cart.items.filter((obj: any) => obj.id === id)
+    state.cart.items.filter((obj) => obj.id === id)
   )
-  const addedCount = cartItem.reduce((sum, item: any) => sum + item.count, 0)
+  const addedCount = cartItem.reduce((sum, item) => sum + item.count, 0)
 
   const type = ['тонкое', 'традиционное']
   const [activeType, setActiveType] = useState<number>(0)

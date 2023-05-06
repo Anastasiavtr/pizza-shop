@@ -1,11 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
-import {
-  SortPropertyEnum,
-  SortType,
-  setSort,
-  setSortingOrder,
-} from '../Redux/Slices/filterSlice'
+import { setSort, setSortingOrder } from '../Redux/Slices/filterSlice'
 import { useAppDispatch } from '../AppHooks'
+import { SortPropertyEnum, SortType } from '../Redux/Slices/types'
 
 export const list: SortType[] = [
   { name: 'популярности', type: SortPropertyEnum.RATING },
@@ -18,7 +14,7 @@ type SortProps = {
   sortingOrder: boolean
 }
 
-const Sort: React.FC<SortProps> = ({ sort, sortingOrder }) => {
+const Sort: React.FC<SortProps> = React.memo(({ sort, sortingOrder }) => {
   const dispatch = useAppDispatch()
 
   const [isOpen, setIsOpen] = useState(false)
@@ -84,6 +80,6 @@ const Sort: React.FC<SortProps> = ({ sort, sortingOrder }) => {
       )}
     </div>
   )
-}
+})
 
 export default Sort

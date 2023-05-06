@@ -1,9 +1,7 @@
 import React, { useRef } from 'react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-
 import {
-  SortType,
   setActiveCategory,
   setCurrentPage,
   setFilter,
@@ -15,12 +13,9 @@ import PizzaBlock from '../components/PizzaBlock'
 import Skeleton from '../components/PizzaBlock/Skeleton'
 import Sort, { list } from '../components/Sort'
 import Pagination from '../components/Pagination/Pagination'
-import {
-  PizzaItemType,
-  SearchPizzaType,
-  fetchPizza,
-} from '../Redux/Slices/pizzaSlice'
 import { useAppDispatch, useAppSelector } from '../AppHooks'
+import { fetchPizza } from '../Redux/Slices/asyncActions'
+import { PizzaItemType, SearchPizzaType, SortType } from '../Redux/Slices/types'
 
 const Home: React.FC = () => {
   const { items, status } = useAppSelector((state) => state.pizza)
@@ -31,19 +26,19 @@ const Home: React.FC = () => {
 
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const isSearch = useRef(false)
   const isMounted = useRef(false)
 
   const onChangePage = (value: number) => {
     dispatch(setCurrentPage(value))
   }
 
-  const onChangeCategory = (i: number) => {
+  const onChangeCategory = React.useCallback((i: number) => {
     dispatch(setActiveCategory(i))
-  }
+  }, [])
 
   const getPizza = async () => {
-    const category = activeCategory > 0 ? String(activeCategory) : ''
+    const category =
+      activeCategory > 0 ? `&category=${String(activeCategory)}` : ''
     const search = searchValue ? `&search=${searchValue}` : ''
     const sorting = sortingOrder ? `&order=asc` : `&order=desc`
     let sortType = sort.type
@@ -85,15 +80,14 @@ const Home: React.FC = () => {
 
       dispatch(
         setFilter({
-          category: +params.category,
-          searchValue: params.search || '',
+          category: Number(params.category),
+          searchValue: params.search,
           currentPage: Number(params.currentPage),
           sortingOrder: params.sortingOrder,
           sort: sort || list[0],
         })
       )
     }
-    // isSearch.current = true
   }, [])
 
   useEffect(() => {

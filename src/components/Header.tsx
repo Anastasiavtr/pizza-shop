@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect, useRef } from 'react'
 import logoSvg from '../assets/img/pizza-logo.svg'
 import { Link } from 'react-router-dom'
 import Search from './Search'
@@ -10,16 +10,25 @@ const Header = () => {
   const totalCount = items.reduce((sum, item: any) => {
     return sum + item.count
   }, 0)
+  let isMounted = useRef(false)
+
+  useEffect(() => {
+    if (isMounted) {
+      const json = JSON.stringify(items)
+      localStorage.setItem('cart', json)
+    }
+    isMounted.current = true
+  }, [items])
 
   return (
     <div className="header">
       <div className="container">
-        <Link to="/">
+        <Link reloadDocument to={'/'}>
           <div className="header__logo">
             <img width="38" src={logoSvg} alt="Pizza logo" />
             <div className="header__text">
-              <h1>React Pizza</h1>
-              <p>Cамая вкусная пицца во вселенной</p>
+              <h1>Planet Pizza</h1>
+              <p>Самая вкусная пицца во вселенной</p>
             </div>
           </div>
         </Link>
