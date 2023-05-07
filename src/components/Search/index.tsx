@@ -8,7 +8,7 @@ import { AiOutlineClose, AiOutlineSearch } from 'react-icons/ai'
 const Search: React.FC = () => {
   const dispatch = useDispatch()
   const [value, setValue] = useState('')
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value)
@@ -18,7 +18,7 @@ const Search: React.FC = () => {
   const updateSearchValue = useCallback(
     debounce((value: string) => {
       dispatch(setSearchValue(value))
-    }, 500),
+    }, 400),
     []
   )
   const onClickClear = () => {

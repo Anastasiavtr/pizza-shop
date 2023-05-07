@@ -1,4 +1,3 @@
-import { useEffect, useRef } from 'react'
 import logoSvg from '../assets/img/pizza-logo.svg'
 import { Link } from 'react-router-dom'
 import Search from './Search'
@@ -7,18 +6,9 @@ import { useAppSelector } from '../AppHooks'
 
 const Header = () => {
   const { items, totalPrice } = useAppSelector((state) => state.cart)
-  const totalCount = items.reduce((sum, item: any) => {
+  const totalCount = items.reduce((sum, item) => {
     return sum + item.count
   }, 0)
-  let isMounted = useRef(false)
-
-  useEffect(() => {
-    if (isMounted) {
-      const json = JSON.stringify(items)
-      localStorage.setItem('cart', json)
-    }
-    isMounted.current = true
-  }, [items])
 
   return (
     <div className="header">

@@ -5,12 +5,12 @@ import Loading from '../components/Loading'
 
 const FullPizza: React.FC = () => {
   const params = useParams()
+  const navigate = useNavigate()
   const [pizza, setPizza] = useState<{
     imageUrl: string
     title: string
     price: string
   }>()
-  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchPizza = async () => {
